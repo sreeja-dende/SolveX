@@ -65,8 +65,11 @@ Run this in a new terminal:
 ```bash
 curl -X POST http://localhost:5000/api/auth/register \
   -H "Content-Type: application/json" \
-  -d '{"name":"Admin","email":"admin@solvex.com","password":"admin123","role":"admin"}'
+  -d '{"name":"Admin","email":"admin@solvex.com","password":"admin123","role":"admin","adminKey":"<ADMIN_SETUP_KEY from backend/.env>"}'
 ```
+(Copy `backend/.env.example` to `backend/.env` first and set `JWT_SECRET` and `ADMIN_SETUP_KEY`.)
+
+> Deploying online instead? See **DEPLOY.md**.
 Then login with: admin@solvex.com / admin123
 
 ---

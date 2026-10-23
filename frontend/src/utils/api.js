@@ -1,17 +1,10 @@
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-// ============================================================
-//  ⚠️  CHANGE THIS IP BEFORE RUNNING ON YOUR PHONE!
-//
-//  Windows: open cmd → type "ipconfig" → look for IPv4 Address
-//  Mac/Linux: open terminal → type "hostname -I"
-//
-//  ✅ Phone and PC must be on the SAME WiFi network
-//  ✅ Format: http://YOUR_PC_IP:5000/api
-//  ❌ Never use "localhost" on a physical phone
-// ============================================================
-export const BASE_URL = 'http://192.168.43.132:5000/api';
+// API base URL.
+//  - Deployed / web build: set EXPO_PUBLIC_API_URL, e.g. https://solvex-api.onrender.com/api
+//  - Local dev on a phone: set it to http://YOUR_PC_IP:5000/api (same WiFi), or edit the fallback below.
+export const BASE_URL = process.env.EXPO_PUBLIC_API_URL || 'http://192.168.43.132:5000/api';
 
 const api = axios.create({
   baseURL: BASE_URL,

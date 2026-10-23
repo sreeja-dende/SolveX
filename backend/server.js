@@ -31,7 +31,7 @@ app.use('/api/admin', adminRoutes);
 app.use('/api/profile', profileRoutes);
 
 // Health check
-app.get('/', (req, res) => {
+app.get(['/', '/api/health'], (req, res) => {
   res.json({ message: 'SolveX API is running!', version: '3.0.0', status: 'ok' });
 });
 
@@ -43,6 +43,11 @@ app.use((err, req, res, next) => {
 
 const PORT = process.env.PORT || 5000;
 const MONGO_URI = process.env.MONGO_URI || 'mongodb://localhost:27017/solvex';
+
+if (!process.env.JWT_SECRET) {
+  console.error('❌ JWT_SECRET is not set. Add it to backend/.env (local) or the Render environment.');
+  process.exit(1);
+}
 
 mongoose
   .connect(MONGO_URI)

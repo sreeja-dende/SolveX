@@ -1,0 +1,40 @@
+# Render Blueprint — deploys the SolveX API and the web app together.
+# Render dashboard → New → Blueprint → pick this repo. You'll be asked for MONGO_URI.
+services:
+  - type: web
+    name: solvex-api
+    runtime: node
+    plan: free
+    rootDir: backend
+    buildCommand: npm ci
+    startCommand: npm start
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: MONGO_URI
+        sync: false            # paste your MongoDB Atlas connection string
+      - key: JWT_SECRET
+        generateValue: true
+      - key: JWT_EXPIRE
+        value: 7d
+      - key: ADMIN_SETUP_KEY
+        generateValue: true    # needed once to create the admin account
+      - key: EMAIL_USER
+        sync: false            # optional: Gmail address for password-reset OTPs
+      - key: EMAIL_PASS
+        sync: false            # optional: Gmail App Password
+
+  - type: web
+    name: solvex-web
+    runtime: static
+    rootDir: frontend
+    buildCommand: npm ci && npx expo export --platform web
+    staticPublishPath: dist
+    envVars:
+      - key: EXPO_PUBLIC_API_URL
+        value: https://solvex-api.onrender.com/api   # change if Render gives the API a different URL
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html

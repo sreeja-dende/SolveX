@@ -38,6 +38,10 @@ const register = async (req, res) => {
     if (!email || !isValidEmail(email.trim())) return res.status(400).json({ success: false, message: 'Please enter a valid email address' });
     if (!password || password.length < 6) return res.status(400).json({ success: false, message: 'Password must be at least 6 characters' });
     if (!['student', 'startup', 'admin'].includes(role)) return res.status(400).json({ success: false, message: 'Invalid role' });
+    // Admin accounts can only be created with the server-side ADMIN_SETUP_KEY (sent as "adminKey").
+    if (role === 'admin' && (!process.env.ADMIN_SETUP_KEY || req.body.adminKey !== process.env.ADMIN_SETUP_KEY)) {
+      return res.status(403).json({ success: false, message: 'Admin registration is not allowed' });
+    }
 
     const exists = await User.findOne({ email: email.trim().toLowerCase() });
     if (exists) return res.status(400).json({ success: false, message: 'Email already registered' });

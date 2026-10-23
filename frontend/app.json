@@ -4,12 +4,20 @@
     "slug": "solvex-app",
     "version": "1.0.0",
     "sdkVersion": "54.0.0",
-    "platforms": ["ios", "android"],
+    "platforms": [
+      "ios",
+      "android",
+      "web"
+    ],
     "android": {
       "adaptiveIcon": {
         "backgroundColor": "#0A2463"
       }
     },
-    "newArchEnabled": false
+    "newArchEnabled": false,
+    "web": {
+      "bundler": "metro",
+      "output": "single"
+    }
   }
 }

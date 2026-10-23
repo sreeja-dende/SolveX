@@ -33,7 +33,7 @@ services:
     staticPublishPath: dist
     envVars:
       - key: EXPO_PUBLIC_API_URL
-        value: https://solvex-api.onrender.com/api   # change if Render gives the API a different URL
+        value: https://solvex-api-34k6.onrender.com/api   # change if Render gives the API a different URL
     routes:
       - type: rewrite
         source: /*

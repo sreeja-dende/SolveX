@@ -28,14 +28,14 @@ Commit these changes (`render.yaml`, `DEPLOY.md`, `.env.example` files, and the 
 2. Render reads `render.yaml` and shows two services: `solvex-api` and `solvex-web`.
 3. When prompted, paste **MONGO_URI** from step 1. Leave `EMAIL_USER` / `EMAIL_PASS` blank unless you want reset-OTP emails (Gmail App Password).
 4. Click **Apply**. Wait for both to show **Live**.
-5. Check the API: open `https://solvex-api.onrender.com/api/health` → `{"status":"ok"}`.
+5. Check the API: open `https://solvex-api-34k6.onrender.com/api/health` → `{"status":"ok"}`.
 
 > ⚠️ If Render named the API something other than `solvex-api.onrender.com`, update `EXPO_PUBLIC_API_URL` on `solvex-web` (Environment tab) and click **Manual Deploy → Clear cache & deploy**.
 
 ## 4 · Create the admin account (once)
 Copy `ADMIN_SETUP_KEY` from `solvex-api` → **Environment**, then:
 ```bash
-curl -X POST https://solvex-api.onrender.com/api/auth/register \
+curl -X POST https://solvex-api-34k6.onrender.com/api/auth/register \
   -H "Content-Type: application/json" \
   -d '{"name":"Admin","email":"admin@solvex.com","password":"<strong-password>","role":"admin","adminKey":"<ADMIN_SETUP_KEY>"}'
 ```
@@ -47,7 +47,7 @@ Without the key, admin signup is refused (so nobody can make themselves admin on
 **Phone via Expo Go (for demo):**
 ```bash
 cd frontend
-echo "EXPO_PUBLIC_API_URL=https://solvex-api.onrender.com/api" > .env
+echo "EXPO_PUBLIC_API_URL=https://solvex-api-34k6.onrender.com/api" > .env
 npm install
 npx expo start --tunnel
 ```

@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
+import { useFocusEffect } from '@react-navigation/native';
 import {
   View, Text, StyleSheet, FlatList, TouchableOpacity,
   SafeAreaView, RefreshControl, ActivityIndicator,
@@ -27,7 +28,7 @@ export default function MySolutionsScreen({ navigation }) {
     finally { setLoading(false); setRefreshing(false); }
   }, []);
 
-  useEffect(() => { fetchSolutions(); }, []);
+  useFocusEffect(useCallback(() => { fetchSolutions(); }, []));
 
   const wins = solutions.filter((s) => s.isWinner).length;
 

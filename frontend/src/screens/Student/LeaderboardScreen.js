@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
+import { useFocusEffect } from '@react-navigation/native';
 import {
   View, Text, StyleSheet, FlatList, SafeAreaView,
   RefreshControl, ActivityIndicator,
@@ -26,7 +27,7 @@ export default function LeaderboardScreen() {
     finally { setLoading(false); setRefreshing(false); }
   };
 
-  useEffect(() => { fetchLeaderboard(); }, []);
+  useFocusEffect(useCallback(() => { fetchLeaderboard(); }, []));
 
   const myRank = leaderboard.find((s) => s._id === user?._id);
   const top3 = leaderboard.slice(0, 3);

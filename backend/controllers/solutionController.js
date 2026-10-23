@@ -92,8 +92,10 @@ const addFeedback = async (req, res) => {
     }
 
     solution.startupFeedback = feedback;
-    solution.startupRating = rating;
-    solution.status = 'reviewed';
+    // Rating is optional; only store a valid 1–5 star value (0 = "not rated").
+    const stars = Number(rating);
+    if (Number.isInteger(stars) && stars >= 1 && stars <= 5) solution.startupRating = stars;
+    if (solution.status !== 'winner') solution.status = 'reviewed';
     await solution.save();
 
     res.json({ success: true, message: 'Feedback added', solution });

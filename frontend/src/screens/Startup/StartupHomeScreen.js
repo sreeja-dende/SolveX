@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
+import { useFocusEffect } from '@react-navigation/native';
 import {
   View, Text, StyleSheet, FlatList, TouchableOpacity,
   SafeAreaView, RefreshControl, ActivityIndicator,
@@ -29,7 +30,7 @@ export default function StartupHomeScreen({ navigation }) {
     finally { setLoading(false); setRefreshing(false); }
   }, []);
 
-  useEffect(() => { fetchChallenges(); }, []);
+  useFocusEffect(useCallback(() => { fetchChallenges(); }, []));
 
   const total = challenges.length;
   const open = challenges.filter(c => c.status === 'open').length;

@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
+import { useFocusEffect } from '@react-navigation/native';
 import {
   View, Text, StyleSheet, FlatList, TouchableOpacity,
-  SafeAreaView, RefreshControl, ActivityIndicator, Alert,
-} from 'react-native';
+  SafeAreaView, RefreshControl, ActivityIndicator, } from 'react-native';
+import Alert from '../../utils/alert';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import Toast from 'react-native-toast-message';
@@ -28,7 +29,7 @@ export default function ViewSubmissionsScreen({ navigation, route }) {
     finally { setLoading(false); setRefreshing(false); }
   };
 
-  useEffect(() => { fetchData(); }, []);
+  useFocusEffect(useCallback(() => { fetchData(); }, []));
 
   const handleCloseChallenge = () => {
     Alert.alert('Close Challenge?', 'No more submissions will be accepted.', [

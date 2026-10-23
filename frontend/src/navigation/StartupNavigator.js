@@ -17,7 +17,7 @@ const ProfileStack = createStackNavigator();
 
 function StartupHomeStack() {
   return (
-    <HomeStack.Navigator screenOptions={{ headerShown: false }}>
+    <HomeStack.Navigator screenOptions={{ headerShown: false, cardStyle: { flex: 1 } }}>
       <HomeStack.Screen name="StartupHome" component={StartupHomeScreen} />
       <HomeStack.Screen name="ViewSubmissions" component={ViewSubmissionsScreen} />
       <HomeStack.Screen name="SolutionDetail" component={SolutionDetailScreen} />
@@ -27,7 +27,7 @@ function StartupHomeStack() {
 
 function StartupProfileStack() {
   return (
-    <ProfileStack.Navigator screenOptions={{ headerShown: false }}>
+    <ProfileStack.Navigator screenOptions={{ headerShown: false, cardStyle: { flex: 1 } }}>
       <ProfileStack.Screen name="StartupProfileMain" component={StartupProfileScreen} />
       <ProfileStack.Screen name="StartupVerification" component={StartupVerificationScreen} />
     </ProfileStack.Navigator>

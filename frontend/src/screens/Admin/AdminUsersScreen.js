@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import {
   View, Text, StyleSheet, FlatList, TouchableOpacity,
-  SafeAreaView, RefreshControl, ActivityIndicator, Alert,
-} from 'react-native';
+  SafeAreaView, RefreshControl, ActivityIndicator, } from 'react-native';
+import Alert from '../../utils/alert';
 import { Ionicons } from '@expo/vector-icons';
 import Toast from 'react-native-toast-message';
 import api from '../../utils/api';

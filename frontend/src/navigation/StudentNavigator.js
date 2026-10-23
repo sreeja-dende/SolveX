@@ -18,7 +18,7 @@ const SolutionsStack = createStackNavigator();
 
 function HomeStackNavigator() {
   return (
-    <HomeStack.Navigator screenOptions={{ headerShown: false }}>
+    <HomeStack.Navigator screenOptions={{ headerShown: false, cardStyle: { flex: 1 } }}>
       <HomeStack.Screen name="StudentHome" component={StudentHomeScreen} />
       <HomeStack.Screen name="ChallengeDetail" component={ChallengeDetailScreen} />
       <HomeStack.Screen name="SubmitSolution" component={SubmitSolutionScreen} />
@@ -28,7 +28,7 @@ function HomeStackNavigator() {
 
 function SolutionsStackNavigator() {
   return (
-    <SolutionsStack.Navigator screenOptions={{ headerShown: false }}>
+    <SolutionsStack.Navigator screenOptions={{ headerShown: false, cardStyle: { flex: 1 } }}>
       <SolutionsStack.Screen name="MySolutions" component={MySolutionsScreen} />
       <SolutionsStack.Screen name="Certificates" component={CertificatesScreen} />
     </SolutionsStack.Navigator>

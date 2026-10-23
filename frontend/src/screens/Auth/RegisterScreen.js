@@ -15,6 +15,29 @@ import { COLORS, RADIUS, SHADOW } from '../../assets/theme';
 const isValidEmail = (e) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e.trim());
 const isValidName  = (n) => n && n.trim().length >= 2;
 
+// Defined outside the screen: an inner component is re-created on every
+// render, which remounts the TextInput and drops focus after each keystroke.
+function Field({ icon, placeholder, value, onChange, secure, keyboard, multiline }) {
+  return (
+    <View style={[styles.inputWrap, multiline && { alignItems: 'flex-start' }]}>
+      <Ionicons name={icon} size={16} color={COLORS.textMuted} style={[styles.inputIcon, multiline && { marginTop: 14 }]} />
+      <TextInput
+        style={[styles.input, multiline && { minHeight: 80, textAlignVertical: 'top' }]}
+        placeholder={placeholder}
+        placeholderTextColor={COLORS.textMuted}
+        value={value}
+        onChangeText={onChange}
+        secureTextEntry={secure}
+        keyboardType={keyboard || 'default'}
+        autoCapitalize={['email-address', 'url'].includes(keyboard) ? 'none' : 'sentences'}
+        multiline={multiline}
+        autoCorrect={false}
+        blurOnSubmit={false}
+      />
+    </View>
+  );
+}
+
 export default function RegisterScreen({ navigation, route }) {
   const role = route.params?.role || 'student';
   const { register } = useAuth();
@@ -113,24 +136,6 @@ export default function RegisterScreen({ navigation, route }) {
 
   const roleColor = role === 'student' ? COLORS.primary : '#7B2FBE';
 
-  const Field = ({ icon, placeholder, value, onChange, secure, keyboard, multiline }) => (
-    <View style={[styles.inputWrap, multiline && { alignItems: 'flex-start' }]}>
-      <Ionicons name={icon} size={16} color={COLORS.textMuted} style={[styles.inputIcon, multiline && { marginTop: 14 }]} />
-      <TextInput
-        style={[styles.input, multiline && { minHeight: 80, textAlignVertical: 'top' }]}
-        placeholder={placeholder}
-        placeholderTextColor={COLORS.textMuted}
-        value={value}
-        onChangeText={onChange}
-        secureTextEntry={secure}
-        keyboardType={keyboard || 'default'}
-        autoCapitalize={['email-address', 'url'].includes(keyboard) ? 'none' : 'sentences'}
-        multiline={multiline}
-        autoCorrect={false}
-        blurOnSubmit={false}
-      />
-    </View>
-  );
 
   return (
     <SafeAreaView style={styles.container}>

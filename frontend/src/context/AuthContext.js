@@ -54,6 +54,8 @@ export const AuthProvider = ({ children }) => {
       await AsyncStorage.setItem('solvex_user', JSON.stringify(newUser));
       setToken(newToken);
       setUser(newUser);
+      // Login/register return a trimmed user; load the full profile (description, verified badge, stats…)
+      refreshUserFromServer(newToken);
       return newUser;
     } catch (error) {
       console.log('Login API error:', error.response?.data || error.message);
@@ -69,6 +71,8 @@ export const AuthProvider = ({ children }) => {
       await AsyncStorage.setItem('solvex_user', JSON.stringify(newUser));
       setToken(newToken);
       setUser(newUser);
+      // Login/register return a trimmed user; load the full profile (description, verified badge, stats…)
+      refreshUserFromServer(newToken);
       return newUser;
     } catch (error) {
       console.log('Register API error:', error.response?.data || error.message);

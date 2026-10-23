@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
+import { useFocusEffect } from '@react-navigation/native';
 import {
   View, Text, StyleSheet, FlatList, TouchableOpacity,
-  SafeAreaView, RefreshControl, ActivityIndicator, Alert,
-} from 'react-native';
+  SafeAreaView, RefreshControl, ActivityIndicator, } from 'react-native';
+import Alert from '../../utils/alert';
 import { Ionicons } from '@expo/vector-icons';
 import Toast from 'react-native-toast-message';
 import api from '../../utils/api';
@@ -28,9 +29,9 @@ export default function AdminChallengesScreen({ navigation }) {
     }
   };
 
-  useEffect(() => {
+  useFocusEffect(useCallback(() => {
     fetchChallenges();
-  }, []);
+  }, []));
 
   const fetchSolutions = async (challengeId) => {
     if (solutions[challengeId]) return;

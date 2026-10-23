@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
+import { useFocusEffect } from '@react-navigation/native';
 import {
-  View, Text, StyleSheet, ScrollView, SafeAreaView, RefreshControl, ActivityIndicator,
+  View, Text, StyleSheet, ScrollView, TouchableOpacity, SafeAreaView, RefreshControl, ActivityIndicator,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
@@ -22,7 +23,7 @@ export default function AdminDashboardScreen() {
     finally { setLoading(false); setRefreshing(false); }
   };
 
-  useEffect(() => { fetchStats(); }, []);
+  useFocusEffect(useCallback(() => { fetchStats(); }, []));
 
   const STAT_CARDS = stats ? [
     { label: 'Total Students', value: stats.totalStudents, icon: 'school', color: COLORS.primary },
@@ -36,8 +37,16 @@ export default function AdminDashboardScreen() {
   return (
     <SafeAreaView style={styles.container}>
       <LinearGradient colors={[COLORS.primary, '#060E26']} style={styles.header}>
-        <Text style={styles.headerTitle}>Admin Panel</Text>
-        <Text style={styles.headerSub}>SolveX Platform Overview</Text>
+        <View style={styles.headerRow}>
+          <View style={{ flex: 1 }}>
+            <Text style={styles.headerTitle}>Admin Panel</Text>
+            <Text style={styles.headerSub}>SolveX Platform Overview</Text>
+          </View>
+          <TouchableOpacity style={styles.logoutBtn} onPress={logout}>
+            <Ionicons name="log-out-outline" size={16} color="#fff" />
+            <Text style={styles.logoutText}>Sign Out</Text>
+          </TouchableOpacity>
+        </View>
       </LinearGradient>
 
       <ScrollView
@@ -85,6 +94,9 @@ const styles = StyleSheet.create({
   header: { padding: 20, paddingTop: 20, paddingBottom: 28 },
   headerTitle: { fontSize: 26, fontWeight: '900', color: '#fff', marginBottom: 4 },
   headerSub: { fontSize: 13, color: 'rgba(255,255,255,0.65)' },
+  headerRow: { flexDirection: 'row', alignItems: 'center', gap: 12 },
+  logoutBtn: { flexDirection: 'row', alignItems: 'center', gap: 6, paddingVertical: 8, paddingHorizontal: 12, borderRadius: 20, backgroundColor: 'rgba(255,255,255,0.15)' },
+  logoutText: { color: '#fff', fontSize: 13, fontWeight: '700' },
   sectionLabel: { fontSize: 11, fontWeight: '800', color: COLORS.accentGold, letterSpacing: 2, textTransform: 'uppercase' },
   statsGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: 12 },
   statCard: {

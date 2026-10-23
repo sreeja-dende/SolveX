@@ -82,7 +82,16 @@ const login = async (req, res) => {
 
 const getMe = async (req, res) => {
   try {
-    const user = await User.findById(req.user._id).select('-password');
+    const user = (await User.findById(req.user._id).select('-password')).toObject();
+    if (user.role === 'startup') {
+      // Live stats shown on the startup profile
+      const Challenge = require('../models/Challenge');
+      const Solution = require('../models/Solution');
+      const challenges = await Challenge.find({ startup: user._id }).select('_id status');
+      user.challengesPosted = challenges.length;
+      user.totalSubmissions = await Solution.countDocuments({ challenge: { $in: challenges.map(c => c._id) } });
+      user.winnersSelected = challenges.filter(c => c.status === 'winner_selected').length;
+    }
     res.json({ success: true, user });
   } catch (error) { res.status(500).json({ success: false, message: error.message }); }
 };
@@ -94,11 +103,21 @@ const forgotPassword = async (req, res) => {
     const key = email.trim().toLowerCase();
     const user = await User.findOne({ email: key });
     if (!user) return res.status(404).json({ success: false, message: 'No account found with this email' });
+    const emailConfigured = process.env.EMAIL_USER && process.env.EMAIL_USER !== 'your_gmail@gmail.com' && process.env.EMAIL_PASS;
+    const isDev = process.env.NODE_ENV === 'development';
+    if (!emailConfigured && !isDev) {
+      return res.status(503).json({ success: false, message: 'Password reset by email is not set up yet. Please contact the SolveX admin.' });
+    }
     const otp = Math.floor(100000 + Math.random() * 900000).toString();
     otpStore[key] = { otp, expiresAt: Date.now() + 10 * 60 * 1000 };
-    console.log(`\n🔑 OTP for ${key}: ${otp} (10 min)\n`);
-    try { await sendOTPEmail(email.trim(), otp); console.log('✅ Email sent'); }
-    catch (e) { console.error('Email failed (OTP still works via console):', e.message); }
+    if (isDev) console.log(`\n🔑 OTP for ${key}: ${otp} (10 min)\n`);
+    if (emailConfigured) {
+      try { await sendOTPEmail(email.trim(), otp); console.log('✅ Email sent'); }
+      catch (e) {
+        console.error('Email failed:', e.message);
+        if (!isDev) return res.status(502).json({ success: false, message: 'Could not send the OTP email. Please try again later.' });
+      }
+    }
     res.json({ success: true, message: 'OTP sent to your email address.', devOtp: process.env.NODE_ENV === 'development' ? otp : undefined });
   } catch (error) { res.status(500).json({ success: false, message: error.message }); }
 };

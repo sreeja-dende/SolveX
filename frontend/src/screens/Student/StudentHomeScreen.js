@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
+import { useFocusEffect } from '@react-navigation/native';
 import {
   View, Text, StyleSheet, FlatList, TouchableOpacity,
   TextInput, RefreshControl, SafeAreaView, ActivityIndicator,
@@ -42,7 +43,7 @@ export default function StudentHomeScreen({ navigation }) {
     }
   }, [selectedCat, search]);
 
-  useEffect(() => { fetchChallenges(); }, [fetchChallenges]);
+  useFocusEffect(useCallback(() => { fetchChallenges(); }, [fetchChallenges]));
 
   const onRefresh = () => { setRefreshing(true); fetchChallenges(); };
 

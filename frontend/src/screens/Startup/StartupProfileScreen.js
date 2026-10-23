@@ -1,5 +1,7 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, SafeAreaView, Image, Alert } from 'react-native';
+import React, { useState, useCallback } from 'react';
+import { useFocusEffect } from '@react-navigation/native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, SafeAreaView, Image } from 'react-native';
+import Alert from '../../utils/alert';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { useAuth } from '../../context/AuthContext';
@@ -50,7 +52,9 @@ export default function StartupProfileScreen({ navigation }) {
       { text: 'Cancel', style: 'cancel' },
     ]);
   };
-  const { user, logout } = useAuth();
+  const { user, logout, refreshUser } = useAuth();
+  // Keep points, certificates, stats and verified badge current
+  useFocusEffect(useCallback(() => { refreshUser(); }, []));
 
   return (
     <SafeAreaView style={styles.container}>

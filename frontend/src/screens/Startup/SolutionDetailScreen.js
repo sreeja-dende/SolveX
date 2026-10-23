@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import {
   View, Text, StyleSheet, ScrollView, TouchableOpacity,
-  SafeAreaView, TextInput, ActivityIndicator, Alert,
-} from 'react-native';
+  SafeAreaView, TextInput, ActivityIndicator, } from 'react-native';
+import Alert from '../../utils/alert';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import Toast from 'react-native-toast-message';
@@ -30,7 +30,7 @@ export default function SolutionDetailScreen({ navigation, route }) {
       return Toast.show({ type: 'error', text1: 'Enter feedback first' });
     setSaving(true);
     try {
-      await api.put(`/solutions/${solution._id}/feedback`, { feedback, rating });
+      await api.put(`/solutions/${solution._id}/feedback`, { feedback, rating: rating || undefined });
       Toast.show({ type: 'success', text1: 'Feedback saved!' });
     } catch (e) {
       Toast.show({ type: 'error', text1: 'Error', text2: e.response?.data?.message });

@@ -18,7 +18,7 @@
 
 <sub>Hosted on Render's free tier, so the first load can take about 50 seconds while the server wakes up.</sub>
 
-[Live Demo](https://solvex-web.onrender.com) • [Features](#-features) • [Architecture](#-architecture) • [Tech Stack](#-tech-stack) • [Screenshots](#-screenshots) • [Setup](#-local-setup) • [Team](#-team)
+[Live Demo](https://solvex-web.onrender.com) • [Features](#-features) • [Architecture](#-architecture) • [Tech Stack](#-tech-stack) • [Screenshots](#-screenshots) • [Setup](#-local-setup) • [Author](#-author)
 
 </div>
 
@@ -338,7 +338,7 @@ SolveX/
 
 ---
 
-## 🐛 Challenges We Faced & How We Fixed Them
+## 🐛 Challenges I Faced & How I Fixed Them
 
 ### 1. Red Screen Crash on Expo Go
 **Error:** `TurboModuleRegistry.getEnforcing: PlatformConstants could not be found`  
@@ -370,24 +370,12 @@ SolveX/
 
 ---
 
-## 📄 Academic Details
+## 👩‍💻 Author
 
-> **Institution:** Rajiv Gandhi University of Knowledge Technologies, Basar  
-> **Department:** Computer Science and Engineering  
-> **Guide:** Mrs. D. Lingavva  
-> **Academic Year:** 2024–2025
+**Sreeja Dende** — designed, built and deployed SolveX end to end.  
+B.Tech Computer Science and Engineering, RGUKT Basar
 
----
-
-## 👩‍💻 Team
-
-<div align="center">
-
-| P. Navya | A. Bhuvitha | D. Sreeja |
-|:---:|:---:|:---:|
-| B210149 | B210115 | B210358 |
-
-</div>
+[GitHub](https://github.com/sreeja-dende) · [LinkedIn](https://www.linkedin.com/in/sreeja-dende/) · [Portfolio](https://portfolio-k5c1fv8h2-sreeja.vercel.app/)
 
 ---
 

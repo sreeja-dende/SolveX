@@ -9,7 +9,7 @@ import { useAuth } from '../../context/AuthContext';
 import api from '../../utils/api';
 import { COLORS, RADIUS, SHADOW } from '../../assets/theme';
 
-export default function AdminDashboardScreen() {
+export default function AdminDashboardScreen({ navigation }) {
   const { user, logout } = useAuth();
   const [stats, setStats] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -58,6 +58,19 @@ export default function AdminDashboardScreen() {
           <View style={styles.center}><ActivityIndicator size="large" color={COLORS.accentGold} /></View>
         ) : (
           <>
+            <TouchableOpacity style={[styles.pendingCard, stats?.pendingVerifications > 0 && styles.pendingCardActive]} onPress={() => navigation.navigate('Verify')}>
+              <Ionicons name="shield-checkmark-outline" size={22} color={stats?.pendingVerifications > 0 ? '#000' : COLORS.accentGold} />
+              <View style={{ flex: 1 }}>
+                <Text style={[styles.pendingTitle, stats?.pendingVerifications > 0 && { color: '#000' }]}>
+                  {stats?.pendingVerifications > 0
+                    ? `${stats.pendingVerifications} startup${stats.pendingVerifications > 1 ? 's' : ''} waiting for verification`
+                    : 'No startups waiting for verification'}
+                </Text>
+                <Text style={[styles.pendingSub, stats?.pendingVerifications > 0 && { color: '#3A2A00' }]}>Review documents and approve or reject</Text>
+              </View>
+              <Ionicons name="chevron-forward" size={18} color={stats?.pendingVerifications > 0 ? '#000' : '#7A8FA6'} />
+            </TouchableOpacity>
+
             <Text style={styles.sectionLabel}>PLATFORM STATS</Text>
             <View style={styles.statsGrid}>
               {STAT_CARDS.map((card, i) => (
@@ -97,6 +110,10 @@ const styles = StyleSheet.create({
   headerRow: { flexDirection: 'row', alignItems: 'center', gap: 12 },
   logoutBtn: { flexDirection: 'row', alignItems: 'center', gap: 6, paddingVertical: 8, paddingHorizontal: 12, borderRadius: 20, backgroundColor: 'rgba(255,255,255,0.15)' },
   logoutText: { color: '#fff', fontSize: 13, fontWeight: '700' },
+  pendingCard: { flexDirection: 'row', alignItems: 'center', gap: 12, backgroundColor: '#1A2A3A', borderRadius: RADIUS.lg, padding: 16, borderWidth: 1, borderColor: COLORS.accentGold + '40' },
+  pendingCardActive: { backgroundColor: COLORS.accentGold, borderColor: COLORS.accentGold },
+  pendingTitle: { fontSize: 15, fontWeight: '800', color: '#fff' },
+  pendingSub: { fontSize: 12, color: '#7A8FA6', marginTop: 2 },
   sectionLabel: { fontSize: 11, fontWeight: '800', color: COLORS.accentGold, letterSpacing: 2, textTransform: 'uppercase' },
   statsGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: 12 },
   statCard: {

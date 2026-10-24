@@ -10,7 +10,7 @@ import { COLORS, RADIUS, SHADOW } from '../../assets/theme';
 
 const TABS = ['all', 'student', 'startup'];
 
-export default function AdminUsersScreen() {
+export default function AdminUsersScreen({ navigation }) {
   const [users, setUsers] = useState([]);
   const [tab, setTab] = useState('all');
   const [loading, setLoading] = useState(true);
@@ -48,24 +48,6 @@ export default function AdminUsersScreen() {
         },
       ]
     );
-  };
-
-  const verifyStartup = (userId, name) => {
-    Alert.alert('Verify Startup?', `Verify ${name} as a legitimate startup?`, [
-      { text: 'Cancel', style: 'cancel' },
-      {
-        text: 'Verify',
-        onPress: async () => {
-          try {
-            await api.put(`/admin/startups/${userId}/verify`);
-            Toast.show({ type: 'success', text1: `${name} verified!` });
-            fetchUsers();
-          } catch (e) {
-            Toast.show({ type: 'error', text1: 'Error' });
-          }
-        },
-      },
-    ]);
   };
 
   const ROLE_COLORS = { student: COLORS.primary, startup: '#7B2FBE', admin: COLORS.accent };
@@ -144,13 +126,18 @@ export default function AdminUsersScreen() {
                     <Text style={styles.actionBtnText}>{item.isActive ? 'Suspend' : 'Activate'}</Text>
                   </TouchableOpacity>
                   {item.role === 'startup' && !item.isVerified && (
-                    <TouchableOpacity
-                      style={styles.verifyBtn}
-                      onPress={() => verifyStartup(item._id, item.companyName || item.name)}
-                    >
-                      <Ionicons name="checkmark-circle" size={14} color="#fff" />
-                      <Text style={styles.verifyBtnText}>Verify Startup</Text>
-                    </TouchableOpacity>
+                    item.verificationStatus === 'pending' ? (
+                      <TouchableOpacity style={styles.verifyBtn} onPress={() => navigation.navigate('Verify')}>
+                        <Ionicons name="document-text" size={14} color="#fff" />
+                        <Text style={styles.verifyBtnText}>Review Documents</Text>
+                      </TouchableOpacity>
+                    ) : (
+                      <View style={styles.statusChip}>
+                        <Text style={styles.statusChipText}>
+                          {item.verificationStatus === 'rejected' ? 'Verification rejected' : 'Not submitted for verification'}
+                        </Text>
+                      </View>
+                    )
                   )}
                 </View>
               </View>
@@ -201,6 +188,8 @@ const styles = StyleSheet.create({
   actionBtnText: { fontSize: 12, fontWeight: '700', color: '#fff' },
   verifyBtn: { flexDirection: 'row', alignItems: 'center', gap: 5, backgroundColor: COLORS.success, borderRadius: RADIUS.round, paddingHorizontal: 12, paddingVertical: 7 },
   verifyBtnText: { fontSize: 12, fontWeight: '700', color: '#fff' },
+  statusChip: { justifyContent: 'center', paddingHorizontal: 10, paddingVertical: 7, borderRadius: RADIUS.round, backgroundColor: '#24384D' },
+  statusChipText: { fontSize: 11, fontWeight: '600', color: '#9FB0C2' },
   center: { flex: 1, justifyContent: 'center', alignItems: 'center', paddingTop: 60, gap: 10 },
   emptyText: { fontSize: 15, color: '#7A8FA6' },
 });

@@ -141,12 +141,4 @@ const resetPassword = async (req, res) => {
   } catch (error) { res.status(500).json({ success: false, message: error.message }); }
 };
 
-const requestVerification = async (req, res) => {
-  try {
-    const { companyName, registrationNumber, yearFounded, teamSize, description, linkedinUrl, websiteUrl, uploadedDocs } = req.body;
-    await User.findByIdAndUpdate(req.user._id, { companyName, companyDescription: description, website: websiteUrl, verificationData: { registrationNumber, yearFounded, teamSize, linkedinUrl, uploadedDocs, submittedAt: new Date() }, verificationStatus: 'pending' });
-    res.json({ success: true, message: 'Verification request submitted!' });
-  } catch (error) { res.status(500).json({ success: false, message: error.message }); }
-};
-
-module.exports = { register, login, getMe, forgotPassword, resetPassword, requestVerification };
+module.exports = { register, login, getMe, forgotPassword, resetPassword };

@@ -4,6 +4,8 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 
 const app = express();
+// Render sits behind a proxy; trust it so req.protocol is https for generated links.
+app.set('trust proxy', 1);
 
 // CORS - allow all origins (needed for mobile app)
 app.use(cors({
@@ -22,6 +24,8 @@ const solutionRoutes = require('./routes/solutionRoutes');
 const leaderboardRoutes = require('./routes/leaderboardRoutes');
 const adminRoutes = require('./routes/adminRoutes');
 const profileRoutes = require('./routes/profileRoutes');
+const verificationRoutes = require('./routes/verificationRoutes');
+const { streamDocument } = require('./controllers/verificationController');
 
 app.use('/api/auth', authRoutes);
 app.use('/api/challenges', challengeRoutes);
@@ -29,6 +33,8 @@ app.use('/api/solutions', solutionRoutes);
 app.use('/api/leaderboard', leaderboardRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/profile', profileRoutes);
+app.use('/api/verification', verificationRoutes);
+app.get('/api/files/verification/:docId', streamDocument);
 
 // Health check
 app.get(['/', '/api/health'], (req, res) => {

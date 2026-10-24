@@ -12,6 +12,7 @@ const getStats = async (req, res) => {
     const openChallenges = await Challenge.countDocuments({ status: 'open' });
     const totalSolutions = await Solution.countDocuments();
     const winnersSelected = await Challenge.countDocuments({ status: 'winner_selected' });
+    const pendingVerifications = await User.countDocuments({ role: 'startup', verificationStatus: 'pending', isVerified: { $ne: true } });
 
     res.json({
       success: true,
@@ -22,6 +23,7 @@ const getStats = async (req, res) => {
         openChallenges,
         totalSolutions,
         winnersSelected,
+        pendingVerifications,
       },
     });
   } catch (error) {
@@ -57,22 +59,6 @@ const toggleUserStatus = async (req, res) => {
   }
 };
 
-// @desc    Verify a startup
-// @route   PUT /api/admin/startups/:id/verify
-const verifyStartup = async (req, res) => {
-  try {
-    const startup = await User.findById(req.params.id);
-    if (!startup || startup.role !== 'startup') {
-      return res.status(404).json({ success: false, message: 'Startup not found' });
-    }
-    startup.isVerified = true;
-    await startup.save();
-    res.json({ success: true, message: 'Startup verified successfully' });
-  } catch (error) {
-    res.status(500).json({ success: false, message: error.message });
-  }
-};
-
 // @desc    Get all challenges (admin view)
 // @route   GET /api/admin/challenges
 const getAllChallenges = async (req, res) => {
@@ -99,4 +85,4 @@ const deleteChallenge = async (req, res) => {
   }
 };
 
-module.exports = { getStats, getAllUsers, toggleUserStatus, verifyStartup, getAllChallenges, deleteChallenge };
+module.exports = { getStats, getAllUsers, toggleUserStatus, getAllChallenges, deleteChallenge };

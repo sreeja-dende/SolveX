@@ -96,11 +96,24 @@ export default function StartupProfileScreen({ navigation }) {
               style={styles.verifyBanner}
               onPress={() => navigation.navigate('StartupVerification')}
             >
-              <Ionicons name="shield-outline" size={16} color={COLORS.accentGold} />
-              <Text style={styles.verifyBannerText}>
-                Get Verified — Submit company documents for a Verified badge
-              </Text>
-              <Ionicons name="chevron-forward" size={14} color={COLORS.accentGold} />
+              {(() => {
+                const st = user?.verificationStatus;
+                const reason = user?.verificationData?.rejectionReason;
+                const color = st === 'rejected' ? '#FF8A95' : COLORS.accentGold;
+                const icon = st === 'pending' ? 'time-outline' : st === 'rejected' ? 'close-circle-outline' : 'shield-outline';
+                const text = st === 'pending'
+                  ? 'Verification under review — the admin is checking your documents'
+                  : st === 'rejected'
+                    ? `Verification rejected${reason ? `: ${reason}` : ''} — tap to fix and resubmit`
+                    : 'Get Verified — Submit company documents for a Verified badge';
+                return (
+                  <>
+                    <Ionicons name={icon} size={16} color={color} />
+                    <Text style={[styles.verifyBannerText, { color }]}>{text}</Text>
+                    <Ionicons name="chevron-forward" size={14} color={color} />
+                  </>
+                );
+              })()}
             </TouchableOpacity>
           ) : (
             <View style={styles.verifiedBanner}>
@@ -126,10 +139,10 @@ export default function StartupProfileScreen({ navigation }) {
           <Text style={styles.sectionTitle}>Company Information</Text>
           <InfoRow icon="business-outline" label="Company Name" value={user?.companyName} />
           <InfoRow icon="briefcase-outline" label="Industry" value={user?.industry} color="#7B2FBE" />
-          <InfoRow icon="people-outline" label="Team Size" value={user?.teamSize} color={COLORS.success} />
-          <InfoRow icon="calendar-outline" label="Founded" value={user?.foundedYear} color={COLORS.accentGold} />
-          <InfoRow icon="globe-outline" label="Website" value={user?.website} color={COLORS.catTechnical} />
-          <InfoRow icon="logo-linkedin" label="LinkedIn" value={user?.linkedinUrl} color="#0077B5" />
+          <InfoRow icon="people-outline" label="Team Size" value={user?.teamSize || user?.verificationData?.teamSize} color={COLORS.success} />
+          <InfoRow icon="calendar-outline" label="Founded" value={user?.foundedYear || user?.verificationData?.yearFounded} color={COLORS.accentGold} />
+          <InfoRow icon="globe-outline" label="Website" value={user?.website || user?.verificationData?.websiteUrl} color={COLORS.catTechnical} />
+          <InfoRow icon="logo-linkedin" label="LinkedIn" value={user?.linkedinUrl || user?.verificationData?.linkedinUrl} color="#0077B5" />
         </View>
 
         {/* About */}
@@ -170,7 +183,7 @@ export default function StartupProfileScreen({ navigation }) {
           >
             <Ionicons name="shield-checkmark-outline" size={18} color="#7B2FBE" />
             <Text style={[styles.actionBtnText, { color: '#7B2FBE' }]}>
-              {user?.isVerified ? 'Verification Status' : 'Submit Verification Docs'}
+              {user?.isVerified || user?.verificationStatus === 'pending' ? 'Verification Status' : user?.verificationStatus === 'rejected' ? 'Resubmit Verification Docs' : 'Submit Verification Docs'}
             </Text>
           </TouchableOpacity>
 

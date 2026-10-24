@@ -6,6 +6,7 @@ import { COLORS, FONTS } from '../assets/theme';
 import AdminDashboardScreen from '../screens/Admin/AdminDashboardScreen';
 import AdminUsersScreen from '../screens/Admin/AdminUsersScreen';
 import AdminChallengesScreen from '../screens/Admin/AdminChallengesScreen';
+import AdminVerificationsScreen from '../screens/Admin/AdminVerificationsScreen';
 
 const Tab = createBottomTabNavigator();
 
@@ -29,11 +30,13 @@ export default function AdminNavigator() {
           if (route.name === 'AdminDash') iconName = focused ? 'stats-chart' : 'stats-chart-outline';
           else if (route.name === 'Users') iconName = focused ? 'people' : 'people-outline';
           else if (route.name === 'Challenges') iconName = focused ? 'flash' : 'flash-outline';
+          else if (route.name === 'Verify') iconName = focused ? 'shield-checkmark' : 'shield-checkmark-outline';
           return <Ionicons name={iconName} size={22} color={focused ? COLORS.accentGold : '#8899AA'} />;
         },
       })}
     >
       <Tab.Screen name="AdminDash" component={AdminDashboardScreen} options={{ tabBarLabel: 'Dashboard' }} />
+      <Tab.Screen name="Verify" component={AdminVerificationsScreen} options={{ tabBarLabel: 'Verify' }} />
       <Tab.Screen name="Users" component={AdminUsersScreen} options={{ tabBarLabel: 'Users' }} />
       <Tab.Screen name="Challenges" component={AdminChallengesScreen} options={{ tabBarLabel: 'Challenges' }} />
     </Tab.Navigator>

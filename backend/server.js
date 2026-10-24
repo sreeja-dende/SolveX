@@ -36,6 +36,9 @@ app.use('/api/profile', profileRoutes);
 app.use('/api/verification', verificationRoutes);
 app.get('/api/files/verification/:docId', streamDocument);
 
+// Keep-alive ping for uptime monitors: empty 204 response
+app.all('/api/ping', (req, res) => res.status(204).end());
+
 // Health check
 app.get(['/', '/api/health'], (req, res) => {
   res.json({ message: 'SolveX API is running!', version: '3.0.0', status: 'ok' });

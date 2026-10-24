@@ -1,4 +1,4 @@
-# 🚀 Deploying SolveX (Build for Bharat submission)
+# 🚀 Deploying SolveX
 
 | Piece | Where | Cost |
 |---|---|---|

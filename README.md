@@ -14,7 +14,11 @@
 
 **A full-stack mobile application that bridges the gap between academic learning and real-world startup challenges.**
 
-[Features](#-features) • [Architecture](#-architecture) • [Tech Stack](#-tech-stack) • [Screenshots](#-screenshots) • [Setup](#-local-setup) • [Team](#-team)
+### [▶ Try the live app](https://solvex-web.onrender.com)
+
+<sub>Hosted on Render's free tier, so the first load can take about 50 seconds while the server wakes up.</sub>
+
+[Live Demo](https://solvex-web.onrender.com) • [Features](#-features) • [Architecture](#-architecture) • [Tech Stack](#-tech-stack) • [Screenshots](#-screenshots) • [Setup](#-local-setup) • [Team](#-team)
 
 </div>
 
@@ -51,7 +55,8 @@ SolveX is a **role-based mobile platform** built for three types of users — St
 - Compete on the **real-time leaderboard** ranked by points
 
 ### 🚀 Startup Module
-- Register with company details and get a **Verified badge** after document submission
+- Upload company documents (GST and Incorporation certificates, PDF or image) for **admin verification**, then earn a **Verified badge**
+- See verification status (pending, rejected with a reason, or verified) and resubmit if rejected
 - Post real internal challenges with category, difficulty, deadline, and reward points
 - Review all student submissions with full solution details
 - Give **star ratings and written feedback** on each solution
@@ -60,7 +65,7 @@ SolveX is a **role-based mobile platform** built for three types of users — St
 ### 🛡️ Admin Module
 - Platform-wide **statistics dashboard** — users, challenges, solutions, winners
 - **Manage user accounts** — suspend or reactivate
-- **Verify startup** authenticity
+- **Startup verification queue:** review company details, open uploaded documents, then approve or reject with a reason
 - Delete inappropriate or violating challenges
 
 ---
@@ -186,17 +191,29 @@ Student refreshes → Certificate appears instantly ✅
 
 ---
 
+## ☁️ Deployment
+
+| Part | Platform |
+|---|---|
+| Database | MongoDB Atlas (M0) |
+| REST API | Render Web Service |
+| Web app | Expo web export on a Render static site |
+| Mobile | Expo Go |
+
+Everything is defined in [`render.yaml`](render.yaml) (Render Blueprint). Step-by-step guide: [DEPLOY.md](DEPLOY.md).
+
+---
+
 ## ⚙️ Local Setup
 
 ### Prerequisites
 - Node.js v16+
-- MongoDB running locally
-- Expo Go app installed on your Android phone
-- Both phone and PC on the same WiFi network
+- MongoDB (local, or a free MongoDB Atlas cluster)
+- Expo Go on your phone (optional; the app also runs in the browser)
 
 ### 1. Clone the repository
 ```bash
-git clone https://github.com/YOUR_USERNAME/SolveX.git
+git clone https://github.com/sreeja-dende/SolveX.git
 cd SolveX
 ```
 
@@ -206,14 +223,15 @@ cd backend
 npm install
 ```
 
-Create a `.env` file in the backend folder:
+Copy `backend/.env.example` to `backend/.env` and fill it in:
 ```env
 PORT=5000
 MONGO_URI=mongodb://localhost:27017/solvex
 JWT_SECRET=your_jwt_secret_key_here
 JWT_EXPIRE=7d
 NODE_ENV=development
-EMAIL_USER=your_gmail@gmail.com
+ADMIN_SETUP_KEY=choose-a-secret-key
+EMAIL_USER=your_gmail@gmail.com          # optional, for password-reset OTP
 EMAIL_PASS=your_16_char_gmail_app_password
 ```
 
@@ -235,24 +253,23 @@ cd frontend
 npm install
 ```
 
-Open `src/utils/api.js` and update your PC's IP:
-```javascript
-// Find your IP: Windows → ipconfig | Linux → hostname -I
-export const BASE_URL = 'http://YOUR_PC_IP:5000/api';
+Point the app at your API by creating `frontend/.env`:
+```env
+# Browser on the same PC: http://localhost:5000/api
+# Phone on the same WiFi:  http://YOUR_PC_IP:5000/api
+EXPO_PUBLIC_API_URL=http://localhost:5000/api
 ```
 
 Start the app:
 ```bash
-npx expo start --clear
+npx expo start --clear     # press w for web, or scan the QR code with Expo Go
 ```
-
-Scan the QR code with **Expo Go** on your phone. ✅
 
 ### 4. Create Admin Account (first time only)
 ```bash
 curl -X POST http://localhost:5000/api/auth/register \
   -H "Content-Type: application/json" \
-  -d '{"name":"Admin","email":"admin@solvex.com","password":"admin123","role":"admin"}'
+  -d '{"name":"Admin","email":"admin@solvex.com","password":"choose-a-password","role":"admin","adminKey":"<ADMIN_SETUP_KEY>"}'
 ```
 
 ---
@@ -316,7 +333,8 @@ SolveX/
 - **JWT Authentication** — Signed tokens with 7-day expiry. Verified on every protected route via middleware.
 - **Role-Based Access Control** — Student, Startup, and Admin have separate route permissions enforced server-side.
 - **OTP Password Reset** — 6-digit OTP generated server-side, emailed via Nodemailer, expires in 10 minutes.
-- **Admin Protection** — Admin accounts cannot be created through the app UI — only via direct API call.
+- **Admin Protection** — Admin accounts can't be created from the app; registering one requires a server-side `ADMIN_SETUP_KEY`.
+- **Secure document handling** — Uploaded files are type-checked by their file signature (PDF/PNG/JPG/WEBP only, max 2 MB), stored in MongoDB, and opened by admins only through short-lived signed links.
 
 ---
 
@@ -343,7 +361,8 @@ SolveX/
 
 ## 🔮 Future Enhancements
 
-- [ ] Cloud deployment — Backend on Railway, Database on MongoDB Atlas
+- [x] Cloud deployment — API and web app on Render, database on MongoDB Atlas
+- [x] Startup document verification with admin approve/reject
 - [ ] Push notifications — Alert students when new challenges are posted
 - [ ] Profile image persistence — Upload to Cloudinary instead of local device
 - [ ] Structured scoring rubric — Auto-score solution completeness
